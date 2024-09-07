@@ -1,6 +1,5 @@
 from django.db import models
-from django.db.models import Prefetch, Subquery, OuterRef
-from django.db.models.functions import Coalesce
+from django.db.models import Prefetch, Subquery
 
 
 class PostManagerQueryset(models.QuerySet):

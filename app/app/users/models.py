@@ -1,8 +1,9 @@
-from django.db import models
 from django.contrib.auth.models import User as AuthUser
-from app.users.managers import UserManager
+from django.db import models
 
 from app.common.models import TimeStampedModel
+from app.users.managers import UserManager
+
 
 class User(AuthUser, TimeStampedModel):
     

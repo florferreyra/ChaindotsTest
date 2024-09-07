@@ -1,11 +1,13 @@
+from datetime import datetime, timedelta
+
 import pytest
 from django.urls import reverse
-from rest_framework.test import APIClient
+from django.utils import timezone
 from rest_framework import status
+from rest_framework.test import APIClient
+
 from app.posts.models import Comment, Post
 from app.users.models import User
-from django.utils import timezone
-from datetime import timedelta, datetime
 
 
 @pytest.mark.django_db

@@ -1,6 +1,7 @@
-from app.users.serializers import UserCreateSerializer, UserFollowSerializer
-from app.posts.models import Comment, Post
 from rest_framework import serializers
+
+from app.posts.models import Comment, Post
+from app.users.serializers import UserFollowSerializer
 
 
 class CommentSerializer(serializers.ModelSerializer):

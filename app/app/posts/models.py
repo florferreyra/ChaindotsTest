@@ -1,7 +1,8 @@
 from django.db import models
-from app.posts.managers import PostManagerQueryset
 
 from app.common.models import TimeStampedModel
+from app.posts.managers import PostManagerQueryset
+
 
 class Post(TimeStampedModel):
     user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="posts")
