@@ -11,12 +11,28 @@ from rest_framework.test import APIClient
 
 @pytest.mark.django_db
 class TestPosts:
-    def setup(self):
+    """
+    Test suite for the Post API endpoints.
+
+    This class contains tests for listing posts with filters and retrieving a post with its comments.
+    """
+    def setup_method(self):
+        """
+        Set up the test environment.
+
+        Creates a test user and authenticates the API client.
+        """
         self.client = APIClient()
         self.user = User.objects.create(username="testuser", password="testpass")
         self.client.force_authenticate(user=self.user)
 
     def test_post_list_with_user_filter(self):
+        """
+        Test listing posts with a filter for the author.
+
+        Creates two posts for the authenticated user and verifies that the list endpoint returns both posts
+        when filtered by the author's ID.
+        """
         Post.objects.create(user=self.user, content="Post 1", created_at=timezone.now())
         Post.objects.create(user=self.user, content="Post 2", created_at=timezone.now())
 
@@ -27,6 +43,12 @@ class TestPosts:
         assert len(response.data['results']) == 2
 
     def test_post_list_with_date_filters(self):
+        """
+        Test listing posts with date filters.
+
+        Creates two posts with different creation dates and verifies that the list endpoint returns both posts
+        when filtering by date range.
+        """
         self.client.force_authenticate(user=self.user)
 
         now_str = "2024-09-07 18:00"
@@ -50,6 +72,12 @@ class TestPosts:
 
     @pytest.mark.django_db
     def test_post_retrieve_with_comments(self):
+        """
+        Test retrieving a post with its latest comments.
+
+        Creates a post with multiple comments and verifies that the retrieve endpoint returns the post
+        along with the three most recent comments.
+        """
         post = Post.objects.create(user=self.user, content="Post with comments")
 
         Comment.objects.create(post=post, user=self.user, content="Comment 1")
@@ -67,12 +95,28 @@ class TestPosts:
 
 @pytest.mark.django_db
 class TestComments:
-    def setup(self):
+    """
+    Test suite for the Comment API endpoints.
+
+    This class contains tests for creating a comment and listing comments for a specific post.
+    """
+    def setup_method(self):
+        """
+        Set up the test environment.
+
+        Creates a test user and authenticates the API client.
+        """
         self.client = APIClient()
         self.user = User.objects.create(username="testuser", password="testpass")
         self.client.force_authenticate(user=self.user)
 
     def test_comment_create(self):
+        """
+        Test creating a new comment for a post.
+
+        Creates a post and then creates a comment associated with that post. Verifies that the comment
+        creation endpoint returns the correct data.
+        """
         post = Post.objects.create(user=self.user, content="A post to comment")
 
         data = {
@@ -88,6 +132,12 @@ class TestComments:
         assert int(response.data['user']) == self.user.id
 
     def test_comment_list(self):
+        """
+        Test listing comments for a post.
+
+        Creates a post with multiple comments and verifies that the list endpoint returns all comments
+        associated with the post.
+        """
         post = Post.objects.create(user=self.user, content="A post with comments")
 
         Comment.objects.create(post=post, user=self.user, content="Comment 1")
