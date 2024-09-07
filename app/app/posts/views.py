@@ -1,4 +1,5 @@
 
+from app.users.models import User
 from app.posts.filters import PostFilters
 from django.shortcuts import get_object_or_404
 from django.db import IntegrityError
@@ -40,11 +41,11 @@ class CommentAPIView(APIView):
     def post(self, request, post_id):
         post = get_object_or_404(Post, id=post_id)
         content = request.data.get('content')
-        user_id = request.data.get('user_id')
+        user_id = request.data.get('user_id')   
         try:
             comment = Comment.objects.create(
                 post = post,
-                user = user_id,
+                user_id = user_id,
                 content = content
             )
         except IntegrityError as _:
