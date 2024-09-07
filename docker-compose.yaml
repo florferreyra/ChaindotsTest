@@ -1,0 +1,39 @@
+version: "3.9"
+services:
+  app:
+    tty: true
+    stdin_open: true
+    restart: always
+    build:
+      context: .
+      args:
+        ENVIRONMENT: local
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    volumes:
+      - ./:/app
+    env_file:
+      - .env
+    networks:
+      - api-network
+
+  db:
+    image: postgres:15.3-alpine
+    restart: always
+    environment:
+      POSTGRES_PORT: ${POSTGRESQL_PORT}
+      POSTGRES_DB: ${POSTGRESQL_NAME}
+      POSTGRES_USER: ${POSTGRESQL_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD}
+    volumes:
+      - data:/var/lib/postgresql/data
+    networks:
+      - api-network
+
+volumes:
+  data: {}
+
+networks:
+  api-network:
