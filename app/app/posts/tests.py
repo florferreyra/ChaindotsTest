@@ -1,13 +1,12 @@
 from datetime import datetime, timedelta
 
 import pytest
+from app.posts.models import Comment, Post
+from app.users.models import User
 from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
 from rest_framework.test import APIClient
-
-from app.posts.models import Comment, Post
-from app.users.models import User
 
 
 @pytest.mark.django_db
@@ -23,33 +22,31 @@ class TestPosts:
 
         url = reverse('posts-list')
         response = self.client.get(url, {'author_id': self.user.id})
-        
+
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data['results']) == 2
 
     def test_post_list_with_date_filters(self):
         self.client.force_authenticate(user=self.user)
-        
+
         now_str = "2024-09-07 18:00"
         now = datetime.strptime(now_str, "%Y-%m-%d %H:%M")
         created_at_1 = now - timedelta(days=2)
         created_at_2 = now - timedelta(days=1)
-
 
         Post.objects.create(user=self.user, content="Post 1", created_at=created_at_1)
         Post.objects.create(user=self.user, content="Post 2", created_at=created_at_2)
 
         url = reverse('posts-list')
         from_date = (now - timedelta(days=3)).strftime("%Y-%m-%d %H:%M")
-        response = self.client.get(url, {'author_id': self.user.id, 
-                                    'from_date': from_date,
-                                    'to_date': '2024-09-08 18:00'
-                                    }
-                                )
-        
+        response = self.client.get(url, {'author_id': self.user.id,
+                                         'from_date': from_date,
+                                         'to_date': '2024-09-08 18:00'
+                                         }
+                                   )
+
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data['results']) == 2
-
 
     @pytest.mark.django_db
     def test_post_retrieve_with_comments(self):
@@ -64,7 +61,7 @@ class TestPosts:
         response = self.client.get(url)
 
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data['comments']) == 3 
+        assert len(response.data['comments']) == 3
         assert response.data['comments'][0]['content'] == "Comment 4"
 
 
@@ -89,7 +86,6 @@ class TestComments:
         assert response.status_code == status.HTTP_200_OK
         assert response.data['content'] == "A new comment"
         assert int(response.data['user']) == self.user.id
-
 
     def test_comment_list(self):
         post = Post.objects.create(user=self.user, content="A post with comments")

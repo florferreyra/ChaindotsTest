@@ -11,7 +11,6 @@ class TestUser:
     def setup(self):
         self.client = APIClient()
         self.user = User.objects.create(username="testuser", password="testpass")
-        
 
     def test_user_model_viewset_with_authenticated_user(self):
         token = RefreshToken.for_user(self.user)
@@ -24,5 +23,3 @@ class TestUser:
         url = reverse('users-list')
         response = self.client.get(url)
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
-
-

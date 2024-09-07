@@ -1,6 +1,5 @@
-from django_filters import rest_framework as filters
-
 from app.posts.models import Post
+from django_filters import rest_framework as filters
 
 
 class PostFilters(filters.FilterSet):

@@ -1,7 +1,6 @@
-from django.db import models
-
 from app.common.models import TimeStampedModel
 from app.posts.managers import PostManagerQueryset
+from django.db import models
 
 
 class Post(TimeStampedModel):

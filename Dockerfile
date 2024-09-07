@@ -22,4 +22,6 @@ RUN \
 
 COPY . .
 
-CMD [ "python","app/manage.py","runserver","0.0.0.0:8000" ]
+RUN ["chmod", "+x", "/app/entrypoint.sh"]
+
+ENTRYPOINT [ "/app/entrypoint.sh" ]

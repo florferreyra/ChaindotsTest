@@ -1,3 +1,4 @@
+from app.users.models import Follow, User
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
 from rest_framework import status
@@ -6,8 +7,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
-from app.users.models import Follow, User
 
 from .serializers import UserCreateSerializer, UserSerializer
 
@@ -38,5 +37,5 @@ class FollowAPIView(APIView):
         except IntegrityError as _:
             msg = f"{user.username} is already following to {follow_user.username}"
             return Response(msg, status=status.HTTP_400_BAD_REQUEST)
-        
+
         return Response(status=status.HTTP_200_OK, data=follow.__str__())

@@ -13,26 +13,25 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path
-from app.users.urls import urlpatterns as users_urlpatterns
-from app.users.routers import router as users_router
 from app.posts.routers import router as posts_router
 from app.posts.urls import urlpatterns as posts_urlpatterns
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from app.users.routers import router as users_router
+from app.users.urls import urlpatterns as users_urlpatterns
+from django.contrib import admin
+from django.urls import path
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 from rest_framework.routers import SimpleRouter
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 router = SimpleRouter(trailing_slash=False)
 
 urlpatterns = [
-    path('admin/', admin.site.urls),  
+    path('admin/', admin.site.urls),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),    
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     *users_urlpatterns,
     *posts_urlpatterns
 ]
-
 
 urlpatterns += [
     # Swagger schema
